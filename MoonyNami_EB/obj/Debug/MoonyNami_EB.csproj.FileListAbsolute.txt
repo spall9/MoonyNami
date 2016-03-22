@@ -8,4 +8,3 @@ C:\Users\Daniel\documents\visual studio 2015\Projects\MoonyNami_EB\MoonyNami_EB\
 C:\Users\Daniel\documents\visual studio 2015\Projects\MoonyNami_EB\MoonyNami_EB\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Daniel\documents\visual studio 2015\Projects\MoonyNami_EB\MoonyNami_EB\obj\Debug\MoonyNami_EB.exe
 C:\Users\Daniel\documents\visual studio 2015\Projects\MoonyNami_EB\MoonyNami_EB\obj\Debug\MoonyNami_EB.pdb
-C:\Users\Daniel\documents\visual studio 2015\Projects\MoonyNami_EB\MoonyNami_EB\obj\Debug\MoonyNami_EB.csprojResolveAssemblyReference.cache

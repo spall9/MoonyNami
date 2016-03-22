@@ -68,6 +68,9 @@ namespace MoonyNami_EB
 
             if (menu.Get<CheckBox>("DrawW").CurrentValue)
                 new Circle { Color = System.Drawing.Color.DodgerBlue, Radius = W.Range }.Draw(me.Position);
+
+            if (menu.Get<CheckBox>("DrawWBounce").CurrentValue)
+                SuperBrain.IllustrateValues();
         }
 
         private void AiHeroClientOnOnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -130,7 +133,7 @@ namespace MoonyNami_EB
                 if (W.IsReady())
                 {
                     if (menu.Get<CheckBox>("WCombo2").CurrentValue)
-                        new SuperBrain(menu.Get<CheckBox>("DrawWBounce").CurrentValue).CheckComboW();
+                        SuperBrain.CheckComboW();
                     else if (menu.Get<CheckBox>("WCombo").CurrentValue)
                         WCombo(target);
                 }

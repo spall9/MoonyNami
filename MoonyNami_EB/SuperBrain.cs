@@ -8,23 +8,12 @@ using SharpDX;
 
 namespace MoonyNami_EB
 {
-    class SuperBrain
+    static class SuperBrain
     {
-        public SuperBrain(bool drawBounces)
-        {
-            if (drawBounces)
-                Drawing.OnDraw += IllustrateValues;
-        }
+        private static float lastDelayTime = 0;
+        private static int lastDrawEndTick = 0;
 
-        ~SuperBrain()
-        {
-            Drawing.OnDraw -= IllustrateValues;
-        }
-
-        private float lastDelayTime = 0;
-        private int lastDrawEndTick = 0;
-
-        private void IllustrateValues(EventArgs args)
+        public static void IllustrateValues()
         {
             if (Environment.TickCount - lastDrawEndTick < lastDelayTime)
                 return;
@@ -67,25 +56,25 @@ namespace MoonyNami_EB
             lastDrawEndTick = Environment.TickCount;
         }
 
-        readonly Spell.Targeted W = new Spell.Targeted(SpellSlot.W, 725);
-        private float Wspeed = 1600;
+        readonly static Spell.Targeted W = new Spell.Targeted(SpellSlot.W, 725);
+        private static float Wspeed = 1600;
         /// <summary>
         /// restHp Value (from 0 - 10)
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        float GetMissHpValue(float hpMissingPercent)
+        static float GetMissHpValue(float hpMissingPercent)
         {
             return (float)Math.Pow(1.02329299f, hpMissingPercent);
         }
 
         //1 per 3000 hp
-        float GetMaxHealthDecreaseValue(float maxhealth)
+        static float GetMaxHealthDecreaseValue(float maxhealth)
         {
             return maxhealth / 3000;
         }
 
-        List<AIHeroClient> GetWHeroes(AIHeroClient source, bool wStartDelay = false)
+        static List<AIHeroClient> GetWHeroes(AIHeroClient source, bool wStartDelay = false)
         {
             List<AIHeroClient> wHeroes = new List<AIHeroClient>();
             foreach (var hero in EntityManager.Heroes.AllHeroes.Where(x => x.IsValid))
@@ -109,7 +98,7 @@ namespace MoonyNami_EB
         /// <param name="currentValue"></param>
         /// <param name="initHero"></param>
         /// <returns></returns>
-        Tuple<AIHeroClient, float> AddWTarget(AIHeroClient target, List<AIHeroClient> involvedHeroes, float currentValue,
+        static Tuple<AIHeroClient, float> AddWTarget(AIHeroClient target, List<AIHeroClient> involvedHeroes, float currentValue,
              AIHeroClient initHero)
         {
             involvedHeroes.Add(target);
@@ -129,13 +118,13 @@ namespace MoonyNami_EB
             return new Tuple<AIHeroClient, float>(initHero, currentValue);
         }
 
-        void Debug(float val, AIHeroClient initHero)
+        static void Debug(float val, AIHeroClient initHero)
         {
             Chat.Print(initHero.ChampionName + " value: " + val);
         }
 
-        Dictionary<AIHeroClient, float> wValuesToDraw = new Dictionary<AIHeroClient, float>();
-        public void CheckComboW()
+        static Dictionary<AIHeroClient, float> wValuesToDraw = new Dictionary<AIHeroClient, float>();
+        public static void CheckComboW()
         {
             Dictionary<AIHeroClient, float> wValues = new Dictionary<AIHeroClient, float>();
 
@@ -155,7 +144,10 @@ namespace MoonyNami_EB
             {
                 var bestInitHero = wValues.OrderByDescending(x => x.Value).First().Key;
                 //Debug(wValues.OrderByDescending(x => x.Value).First().Value, bestInitHero);
-                W.Cast(bestInitHero);
+                if (!(bestInitHero.IsMe && ObjectManager.Player.HealthPercent >= 85))
+                    W.Cast(bestInitHero);
+                else
+                    wValuesToDraw.Clear();
             }
         }
     }

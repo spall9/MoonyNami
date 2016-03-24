@@ -106,6 +106,9 @@ namespace MoonyNami_EB
             currentValue += GetMissHpValue(100 - target.HealthPercent);
             currentValue -= GetMaxHealthDecreaseValue(target.MaxHealth);
 
+            if (target == initHero && initHero.HealthPercent >= 90)
+                currentValue -= int.MaxValue;
+
             var nextHeroes = GetWHeroes(target);
 
             if (nextHeroes.Any(x => !involvedHeroes.Contains(x) && x.Team != target.Team))
@@ -142,12 +145,12 @@ namespace MoonyNami_EB
 
             if (wValues.Any())
             {
-                var bestInitHero = wValues.OrderByDescending(x => x.Value).First().Key;
+                var bestEntry = wValues.OrderByDescending(x => x.Value).First();
+                var bestValue = bestEntry.Value;
+                var bestInitHero = bestEntry.Key;
                 //Debug(wValues.OrderByDescending(x => x.Value).First().Value, bestInitHero);
-                if (!(bestInitHero.IsMe && ObjectManager.Player.HealthPercent >= 85))
+                if (bestValue > 0)
                     W.Cast(bestInitHero);
-                else
-                    wValuesToDraw.Clear();
             }
         }
     }

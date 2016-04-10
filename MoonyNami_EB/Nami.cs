@@ -53,6 +53,7 @@ namespace MoonyNami_EB
             menu.Add("DrawW", new CheckBox("Draw W range", false));
             menu.Add("DrawWBounce", new CheckBox("Draw estimated W-Bounce"));
             menu.AddLabel("For Super Smart W only");
+            menu.Add("DrawR", new CheckBox("Draw R range"));
 
             Game.OnUpdate += GameOnOnUpdate;
             Interrupter.OnInterruptableSpell += InterrupterOnOnInterruptableSpell;
@@ -71,6 +72,9 @@ namespace MoonyNami_EB
 
             if (menu.Get<CheckBox>("DrawWBounce").CurrentValue)
                 SuperBrain.IllustrateValues();
+
+            if (menu.Get<CheckBox>("DrawR").CurrentValue)
+                new Circle { Color = System.Drawing.Color.DodgerBlue, Radius = R.Range }.Draw(me.Position);
         }
 
         private void AiHeroClientOnOnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

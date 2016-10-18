@@ -21,3 +21,8 @@ C:\Users\Daniel\Documents\GitHub\MoonyNami\MoonyNami_EB\bin\Debug\SharpDX.Direct
 C:\Users\Daniel\Documents\GitHub\MoonyNami\MoonyNami_EB\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Daniel\Documents\GitHub\MoonyNami\MoonyNami_EB\bin\Debug\EloBuddy.Sandbox.dll
 C:\Users\Daniel\Documents\GitHub\MoonyNami\MoonyNami_EB\obj\Debug\MoonyNami_EB.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Debug\MoonyNami_EB.exe.config
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\obj\Debug\MoonyNami_EB.exe
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\obj\Debug\MoonyNami_EB.pdb
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Debug\MoonyNami_EB.exe
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Debug\MoonyNami_EB.pdb

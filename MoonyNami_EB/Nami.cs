@@ -2,6 +2,7 @@
 using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
+using EloBuddy.SDK.Constants;
 using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
@@ -15,7 +16,7 @@ namespace MoonyNami_EB
         private Menu menu;
 
         readonly Spell.Skillshot Q = new Spell.Skillshot(SpellSlot.Q, 875,
-            SkillShotType.Circular, 1, int.MaxValue, 150);
+            SkillShotType.Circular, 500, int.MaxValue, 150);
         readonly Spell.Targeted W = new Spell.Targeted(SpellSlot.W, 725);
         readonly Spell.Targeted E = new Spell.Targeted(SpellSlot.E, 800);
 
@@ -31,7 +32,7 @@ namespace MoonyNami_EB
             menu = MainMenu.AddMenu("Nami", "MoonyNami");
 
             menu.AddLabel("Combo");
-            menu.Add("QCombo", new CheckBox("Use Q"));
+            menu.Add("QCombo", new CheckBox("Use Q", false));
             menu.Add("WCombo", new CheckBox("Smart W", false));
             menu.Add("WCombo2", new CheckBox("Super Smart W"));
             menu.AddLabel("Calculations are based on algorithms");
@@ -58,8 +59,28 @@ namespace MoonyNami_EB
             Game.OnUpdate += GameOnOnUpdate;
             Interrupter.OnInterruptableSpell += InterrupterOnOnInterruptableSpell;
             Gapcloser.OnGapcloser += GapcloserOnOnGapcloser;
-            AIHeroClient.OnBasicAttack += AiHeroClientOnOnBasicAttack;
+            AIHeroClient.OnSpellCast += AiHeroClientOnOnSpellCast;
             Drawing.OnDraw += DrawingOnOnDraw;
+        }
+
+        private void AiHeroClientOnOnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!args.IsAutoAttack())
+                return;
+
+            if (sender.IsMe && args.Target is AIHeroClient)
+            {
+                Core.RepeatAction(() => E.Cast(me), 0, 1000);
+            }
+            else if (sender.IsAlly && sender.Distance(me) <= E.Range && menu.Get<CheckBox>("AutoE").CurrentValue &&
+                     Q.IsReady()
+                     && args.Target is AIHeroClient)
+                E.Cast(sender);
+        }
+
+        private void AiHeroClientOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+           
         }
 
         private void DrawingOnOnDraw(EventArgs args)
@@ -75,18 +96,6 @@ namespace MoonyNami_EB
 
             if (menu.Get<CheckBox>("DrawR").CurrentValue)
                 new Circle { Color = System.Drawing.Color.DodgerBlue, Radius = R.Range }.Draw(me.Position);
-        }
-
-        private void AiHeroClientOnOnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (sender.IsMe && args.Target is AIHeroClient)
-            {
-                Core.RepeatAction(() => E.Cast(me), 0, 1000);
-            }
-            else
-            if (sender.IsAlly && sender.Distance(me) <= E.Range && menu.Get<CheckBox>("AutoE").CurrentValue && Q.IsReady() 
-                && args.Target is AIHeroClient)
-                E.Cast(sender);
         }
 
         private void GapcloserOnOnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs gapcloserEventArgs)
@@ -138,28 +147,27 @@ namespace MoonyNami_EB
                 {
                     if (menu.Get<CheckBox>("WCombo2").CurrentValue)
                         SuperBrain.CheckComboW();
-                    else if (menu.Get<CheckBox>("WCombo").CurrentValue)
+                    else if (menu.Get<CheckBox>("WCombo").CurrentValue && target != null)
                         WCombo(target);
                 }
 
-                if (!E.IsReady())
+                if (!E.IsReady() && target != null)
                     CheckQ(target);
 
-                CheckR(target);
+                CheckR();
             }
         }
 
-        private void CheckR(AIHeroClient target)
+        private void CheckR()
         {
             if (menu.Get<CheckBox>("RCombo").CurrentValue && R.IsReady())
             {
-                foreach (var enemy in EntityManager.Heroes.Enemies.Where(x => x.IsValid &&
-                    target.Health - me.GetSpellDamage(x, SpellSlot.R) <= 500))
+                foreach (var enemy in EntityManager.Heroes.Enemies.Where(x => x.IsValid && x.Distance(me) <= R.Range))
                 {
                     var alliesNearby = EntityManager.Heroes.Allies.Count(ally => !ally.IsMe &&
-                        ally.Distance(enemy) <= 550);
+                        ally.Distance(enemy) <= 800);
 
-                    if (alliesNearby < 3)
+                    if (alliesNearby == 0)
                         continue;
 
                     if (!IsAllyFacing(enemy) && menu.Get<CheckBox>("RComboFacing").CurrentValue)
@@ -168,12 +176,11 @@ namespace MoonyNami_EB
                         continue;
                     }
 
-
                     if (cannotMove(enemy))
                     {
                         var ccBuff = GetCCBuff(enemy);
                         var timeLeft = (ccBuff.EndTime - Game.Time) * 1000;
-                        var arriveTime = R.CastDelay + (me.Distance(enemy) / R.Speed) * 1000;
+                        var arriveTime = R.CastDelay + me.Distance(enemy) / R.Speed * 1000;
 
                         if (arriveTime > timeLeft && arriveTime < timeLeft + 750)
                             R.Cast(enemy.Position);
@@ -202,18 +209,20 @@ namespace MoonyNami_EB
             if (qPred.HitChance >= HitChance.High && menu.Get<CheckBox>("QCombo").CurrentValue &&
                 target.IsValid)
             {
-                var targetFacingVec = 500 * target.Direction.To2D().Perpendicular();
-                var myFacingVec = 500 * me.Direction.To2D().Perpendicular();
+                //var targetFacingVec = 500 * target.Direction.To2D().Perpendicular();
+                //var myFacingVec = 500 * me.Direction.To2D().Perpendicular();
 
-                bool notFacing = targetFacingVec.AngleBetween(myFacingVec) < 90;
+                //bool notFacing = targetFacingVec.AngleBetween(myFacingVec) < 90;
 
 
-                if (notFacing && qPred.CastPosition.Distance(me) < target.Distance(me))
-                {
-                    //fail predicion
-                }
-                else
-                    Q.Cast(qPred.CastPosition);
+                //if (notFacing && qPred.CastPosition.Distance(me) < target.Distance(me))
+                //{
+                //    //fail predicion
+                //}
+                //else 
+                
+                /*.Direction is Broken*/
+                Q.Cast(qPred.CastPosition);
             }
         }
 

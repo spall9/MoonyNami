@@ -1,0 +1,10 @@
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Release\MoonyNami_EB.exe.config
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Release\MoonyNami_EB.exe
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Release\MoonyNami_EB.pdb
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Release\EloBuddy.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Release\EloBuddy.SDK.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Release\SharpDX.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\bin\Release\Newtonsoft.Json.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\obj\Release\MoonyNami_EB.exe
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\MoonyNami\MoonyNami_EB\obj\Release\MoonyNami_EB.pdb

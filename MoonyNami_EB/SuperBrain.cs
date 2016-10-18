@@ -10,8 +10,8 @@ namespace MoonyNami_EB
 {
     static class SuperBrain
     {
-        private static float lastDelayTime = 0;
-        private static int lastDrawEndTick = 0;
+        private static float lastDelayTime;
+        private static int lastDrawEndTick;
 
         public static void IllustrateValues()
         {
@@ -25,8 +25,8 @@ namespace MoonyNami_EB
                 var value = val.Value;
 
                 Random rand = new Random();
-                ColorBGRA drawColor = new ColorBGRA(new Vector3(rand.Next(100) / 100, rand.Next(100) / 100, 
-                    rand.Next(100) / 100), 1F);
+                ColorBGRA drawColor = new ColorBGRA(new Vector3(rand.Next(100) / 100f, rand.Next(100) / 100f, 
+                    rand.Next(100) / 100f), 1F);
 
                 if (wValuesToDraw.Values.Last().Equals(value))
                 {
@@ -36,10 +36,11 @@ namespace MoonyNami_EB
                 {
                     var nextHero = wValuesToDraw.Keys.ToList()[i + 1];
                     //doesnt implement movement predicted position
-                    float flyTime = (hero.Distance(nextHero) / (Wspeed + 500)) * 1000;
+                    float flyTime = hero.Distance(nextHero) / (Wspeed + 500) * 1000;
 
+                    var i1 = i;
                     Core.DelayAction(() =>
-                        new Circle(drawColor, 100, i*3).Draw(nextHero.Position), (int)flyTime
+                        new Circle(drawColor, 100, i1).Draw(nextHero.Position), (int)flyTime
                     );
 
                     lastDelayTime += (int)flyTime;
@@ -56,12 +57,14 @@ namespace MoonyNami_EB
             lastDrawEndTick = Environment.TickCount;
         }
 
-        readonly static Spell.Targeted W = new Spell.Targeted(SpellSlot.W, 725);
+        static readonly Spell.Targeted W = new Spell.Targeted(SpellSlot.W, 725);
         private static float Wspeed = 1600;
+
         /// <summary>
         /// restHp Value (from 0 - 10)
         /// </summary>
         /// <param name="x"></param>
+        /// <param name="hpMissingPercent"></param>
         /// <returns></returns>
         static float GetMissHpValue(float hpMissingPercent)
         {

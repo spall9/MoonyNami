@@ -39,7 +39,7 @@ namespace MoonyNami_EB
             menu.AddSeparator(10);
             menu.Add("AutoE", new CheckBox("Use E on attack"));
             menu.Add("RCombo", new CheckBox("Smart R"));
-            menu.Add("RComboFacing", new CheckBox("Only R when allies face enemy", false));
+            menu.Add("RComboFacing", new CheckBox("Only R when allies face enemy [Core-sided broken]", false));
 
 
             menu.AddSeparator();
